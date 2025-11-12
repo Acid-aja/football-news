@@ -208,8 +208,18 @@ def proxy_image(request):
         return HttpResponse('No URL provided', status=400)
     
     try:
-        # Fetch image from external source
-        response = requests.get(image_url, timeout=10)
+        # Fetch image from external source with fake browser headers
+        response = requests.get(
+            image_url,
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0.0.0 Safari/537.36"
+                )
+            },
+            timeout=10
+        )
         response.raise_for_status()
         
         # Return the image with proper content type
